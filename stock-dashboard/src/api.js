@@ -1,5 +1,4 @@
 const GITHUB_RAW = 'https://raw.githubusercontent.com/jackrazer0906-rgb/stock-dashboard/main/portfolio.json';
-const YAHOO_BASE = 'https://query1.finance.yahoo.com/v8/finance/chart/';
 const CORS_PROXY = 'https://api.allorigins.win/get?url=';
 
 export async function fetchPortfolio() {
@@ -8,38 +7,48 @@ export async function fetchPortfolio() {
   return res.json();
 }
 
-export async function fetchPrice(symbol) {
+// 批次抓取：一次請求所有代號，避免並發過多被 proxy 丟棄
+export async function fetchMultiplePrices(symbols) {
+  if (!symbols || symbols.length === 0) return {};
+
   try {
-    const yahooUrl = `${YAHOO_BASE}${encodeURIComponent(symbol)}?interval=1d&range=1d`;
-    const res = await fetch(`${CORS_PROXY}${encodeURIComponent(yahooUrl)}`);
-    if (!res.ok) return null;
+    const joined = symbols.map(encodeURIComponent).join(',');
+    const yahooUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${joined}&fields=regularMarketPrice,regularMarketChangePercent,regularMarketPreviousClose,shortName,currency,marketState`;
+    const proxyUrl = `${CORS_PROXY}${encodeURIComponent(yahooUrl)}`;
+
+    const res = await fetch(proxyUrl);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
     const wrapper = await res.json();
     const data = JSON.parse(wrapper.contents);
-    const meta = data?.chart?.result?.[0]?.meta;
-    if (!meta) return null;
-    return {
-      symbol,
-      price: meta.regularMarketPrice ?? null,
-      prev: meta.chartPreviousClose ?? null,
-      change: meta.regularMarketPrice && meta.chartPreviousClose
-        ? meta.regularMarketPrice - meta.chartPreviousClose
-        : null,
-      changePct: meta.regularMarketPrice && meta.chartPreviousClose
-        ? ((meta.regularMarketPrice - meta.chartPreviousClose) / meta.chartPreviousClose) * 100
-        : null,
-      currency: meta.currency ?? 'USD',
-      marketState: meta.marketState ?? 'CLOSED',
-    };
-  } catch {
-    return null;
+    const quotes = data?.quoteResponse?.result ?? [];
+
+    const map = {};
+    quotes.forEach(q => {
+      const prev = q.regularMarketPreviousClose ?? null;
+      const price = q.regularMarketPrice ?? null;
+      map[q.symbol] = {
+        symbol: q.symbol,
+        price,
+        prev,
+        change: price != null && prev != null ? price - prev : null,
+        changePct: q.regularMarketChangePercent ?? null,
+        currency: q.currency ?? 'USD',
+        marketState: q.marketState ?? 'CLOSED',
+      };
+    });
+
+    return map;
+  } catch (err) {
+    console.error('[fetchMultiplePrices] 失敗:', err);
+    return {};
   }
 }
 
-export async function fetchMultiplePrices(symbols) {
-  const results = await Promise.all(symbols.map(fetchPrice));
-  const map = {};
-  results.forEach((r, i) => { if (r) map[symbols[i]] = r; });
-  return map;
+// 單支（保留相容性，內部用批次實作）
+export async function fetchPrice(symbol) {
+  const map = await fetchMultiplePrices([symbol]);
+  return map[symbol] ?? null;
 }
 
 // 台股代號加 .TW 後綴
@@ -60,7 +69,7 @@ export const INDICES = {
   ],
 };
 
-// 熱門股抓取（固定觀察清單，Yahoo 不提供即時排行）
+// 觀察清單
 export const WATCHLIST = {
   tw: ['0050.TW', '00878.TW', '2330.TW', '2317.TW', '2454.TW'],
   us: ['NVDA', 'TSLA', 'AAPL', 'AMZN', 'GOOG', 'META', 'MSFT'],
