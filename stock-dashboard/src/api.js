@@ -1,5 +1,6 @@
 const GITHUB_RAW = 'https://raw.githubusercontent.com/jackrazer0906-rgb/stock-dashboard/main/portfolio.json';
-const YAHOO_PROXY = 'https://query1.finance.yahoo.com/v8/finance/chart/';
+const YAHOO_BASE = 'https://query1.finance.yahoo.com/v8/finance/chart/';
+const CORS_PROXY = 'https://api.allorigins.win/get?url=';
 
 export async function fetchPortfolio() {
   const res = await fetch(`${GITHUB_RAW}?t=${Date.now()}`);
@@ -9,12 +10,11 @@ export async function fetchPortfolio() {
 
 export async function fetchPrice(symbol) {
   try {
-    const res = await fetch(
-      `${YAHOO_PROXY}${encodeURIComponent(symbol)}?interval=1d&range=1d`,
-      { headers: { 'Accept': 'application/json' } }
-    );
+    const yahooUrl = `${YAHOO_BASE}${encodeURIComponent(symbol)}?interval=1d&range=1d`;
+    const res = await fetch(`${CORS_PROXY}${encodeURIComponent(yahooUrl)}`);
     if (!res.ok) return null;
-    const data = await res.json();
+    const wrapper = await res.json();
+    const data = JSON.parse(wrapper.contents);
     const meta = data?.chart?.result?.[0]?.meta;
     if (!meta) return null;
     return {
