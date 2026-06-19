@@ -1,5 +1,6 @@
 {
   "buildCommand": "npm install && npm run build",
-  "outputDirectory": "build",
-  "framework": "create-react-app"
+  "outputDirectory": "stock-dashboard/build",
+  "framework": "create-react-app",
+  "rootDirectory": "stock-dashboard"
 }
