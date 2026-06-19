@@ -1,0 +1,91 @@
+{
+  "meta": {
+    "last_updated": "2026-06-19",
+    "currency_us": "USD",
+    "currency_tw": "TWD",
+    "note": "NVDA 賣出 1 股、COIN 清倉、SPCX 買入 2 股待成交，下週更新"
+  },
+  "us_stocks": [
+    {
+      "symbol": "AAPL",
+      "name": "Apple Inc.",
+      "shares": 2,
+      "avg_cost": 155.05,
+      "total_cost": 310.10,
+      "type": "stock"
+    },
+    {
+      "symbol": "AMZN",
+      "name": "Amazon.com Inc.",
+      "shares": 2,
+      "avg_cost": 151.20,
+      "total_cost": 302.40,
+      "type": "stock"
+    },
+    {
+      "symbol": "COIN",
+      "name": "Coinbase Global Inc.",
+      "shares": 1,
+      "avg_cost": 216.17,
+      "total_cost": 216.17,
+      "type": "stock"
+    },
+    {
+      "symbol": "GOOG",
+      "name": "Alphabet Inc.",
+      "shares": 1,
+      "avg_cost": 121.00,
+      "total_cost": 121.00,
+      "type": "stock"
+    },
+    {
+      "symbol": "NVDA",
+      "name": "NVIDIA Corporation",
+      "shares": 21,
+      "avg_cost": 32.82,
+      "total_cost": 689.27,
+      "type": "stock"
+    },
+    {
+      "symbol": "TSLA",
+      "name": "Tesla Inc.",
+      "shares": 6,
+      "avg_cost": 199.83,
+      "total_cost": 1199.00,
+      "type": "stock"
+    },
+    {
+      "symbol": "VOO",
+      "name": "Vanguard S&P 500 ETF",
+      "shares": 0.12307,
+      "avg_cost": 625.66,
+      "total_cost": 77.00,
+      "type": "etf"
+    }
+  ],
+  "tw_stocks": [],
+  "dca_schedule": [],
+  "pending_orders": [
+    {
+      "symbol": "SPCX",
+      "action": "buy",
+      "shares": 2,
+      "status": "pending",
+      "note": "市價單已送出，待成交"
+    },
+    {
+      "symbol": "NVDA",
+      "action": "sell",
+      "shares": 1,
+      "status": "pending",
+      "note": "市價單已送出，待成交"
+    },
+    {
+      "symbol": "COIN",
+      "action": "sell",
+      "shares": 1,
+      "status": "pending",
+      "note": "市價單已送出，待成交，成交後清倉"
+    }
+  ]
+}
