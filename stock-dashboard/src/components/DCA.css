@@ -1,0 +1,68 @@
+.dca-section { margin-bottom: 2rem; }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.dca-empty {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.dca-hint { font-size: 12px; margin-top: 6px; }
+
+.dca-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.dca-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  transition: border-color 0.2s;
+}
+
+.dca-card.urgent { border-color: var(--red); }
+.dca-card.soon { border-color: rgba(245,166,35,0.5); }
+
+.dca-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.dca-symbol { font-weight: 600; font-size: 14px; }
+
+.dca-badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.dca-badge.normal { background: var(--blue-bg); color: var(--blue); }
+.dca-badge.soon { background: rgba(245,166,35,0.15); color: #f5a623; }
+.dca-badge.urgent { background: var(--red-bg); color: var(--red); }
+
+.dca-detail { display: flex; flex-direction: column; gap: 2px; }
+.dca-amount { font-size: 18px; font-weight: 600; font-family: var(--mono); letter-spacing: -0.02em; }
+.dca-freq { font-size: 11px; color: var(--text-muted); }
